@@ -28,7 +28,7 @@ func TestCreateProcessWithSalary(t *testing.T) {
 		"Esteam",
 		"contract",
 		"2023-04-12",
-		WithSalary(6000, "USD"))
+		WithSalary(6000, "usd"))
 	if err != nil {
 		t.Errorf(err.Error())
 	}
@@ -42,7 +42,7 @@ func TestAddProcessWithSalaryAndClient(t *testing.T) {
 		"Esteam",
 		"contract",
 		"2023-04-12",
-		WithSalary(6000, "USD"),
+		WithSalary(6000, "usd"),
 		WithClient("client"))
 	if err != nil {
 		t.Errorf(err.Error())

@@ -16,13 +16,13 @@ type Salary struct {
 type Currency int
 
 const (
-	USD Currency = iota
-	CLP
+	usd Currency = iota
+	clp
 )
 
 var currencyMap = map[string]Currency{
-	"usd": USD,
-	"clp": CLP,
+	"usd": usd,
+	"clp": clp,
 }
 
 func ParseCurrency(s string) (Currency, error) {
@@ -39,15 +39,15 @@ type ProcessID struct {
 type PostulationType int
 
 const (
-	Own PostulationType = iota
-	Recruiter
-	Reference
+	own PostulationType = iota
+	recruiter
+	reference
 )
 
 var postulationTypeMap = map[string]PostulationType{
-	"own":       Own,
-	"recruiter": Recruiter,
-	"reference": Reference,
+	"own":       own,
+	"recruiter": recruiter,
+	"reference": reference,
 }
 
 func ParsePostulationType(s string) (PostulationType, error) {
@@ -60,13 +60,13 @@ func ParsePostulationType(s string) (PostulationType, error) {
 type JobType int
 
 const (
-	Contract JobType = iota
-	Fulltime
+	contract JobType = iota
+	fulltime
 )
 
 var jobTypeMap = map[string]JobType{
-	"contract": Contract,
-	"fulltime": Fulltime,
+	"contract": contract,
+	"fulltime": fulltime,
 }
 
 func ParseJobType(s string) (JobType, error) {

@@ -15,7 +15,7 @@ func TestAddProcessSuccessfully(t *testing.T) {
 		"nezasa",
 		"nezasa",
 		"full-time",
-		"09-03-2023", domain.WithSalary(6000, "USD"))
+		"09-03-2023", domain.WithSalary(6000, "usd"))
 	if err != nil {
 		t.Errorf("Error trying to add a Process %s", err.Error())
 	}
