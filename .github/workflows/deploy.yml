@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Test and Build
 on: [push]
 permissions:
   contents: write
@@ -12,8 +12,5 @@ jobs:
       - name: Test 🧪
         run: go test ./...
 
-      - name: Go Get 🧪
-        run: go get -u .
-
       - name: Install and Build 🔧
-        run: got build main.go
+        run: go build main.go
