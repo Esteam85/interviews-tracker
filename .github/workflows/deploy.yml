@@ -12,5 +12,8 @@ jobs:
       - name: Test 🧪
         run: go test ./...
 
+      - name: Go Get 🧪
+        run: go get -u .
+
       - name: Install and Build 🔧
         run: got build main.go
