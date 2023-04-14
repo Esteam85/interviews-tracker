@@ -94,6 +94,10 @@ func (p *Process) ID() *ProcessID {
 	return p.id
 }
 
+type Repository interface {
+	Save(process *Process) error
+}
+
 type Process struct {
 	id               *ProcessID
 	postulationType  PostulationType

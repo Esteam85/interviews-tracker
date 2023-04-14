@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestCreateProcessWithoutOptions(t *testing.T) {
+func TestAddProcessWithoutOptions(t *testing.T) {
 
 	id, _ := uuid.NewUUID()
 	_, err := NewProcess(
@@ -19,7 +19,7 @@ func TestCreateProcessWithoutOptions(t *testing.T) {
 	}
 }
 
-func TestCreateProcessWithSalary(t *testing.T) {
+func TestAddProcessWithSalary(t *testing.T) {
 
 	id, _ := uuid.NewUUID()
 	_, err := NewProcess(
