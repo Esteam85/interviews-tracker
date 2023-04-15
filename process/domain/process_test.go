@@ -48,3 +48,16 @@ func TestAddProcessWithSalaryAndClient(t *testing.T) {
 		WithClient("client"))
 	assert.NoError(t, err)
 }
+
+func TestAddProcessWithFirstContactDate(t *testing.T) {
+	id, _ := uuid.NewUUID()
+	_, err := NewProcess(
+		id.String(),
+		"Own",
+		"Linkedin",
+		"Esteam",
+		"Dev",
+		"contract",
+		WithFirstContactDate("2023-04-15"))
+	assert.NoError(t, err)
+}
