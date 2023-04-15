@@ -22,7 +22,7 @@ func TestAddProcessSuccessfully(t *testing.T) {
 		"Esteam",
 		"Dev",
 		"contract",
-		domain.WithSalary(6000, "usd"))
+		domain.WithSalary(6000, "usd", "net", "yearly"))
 	assert.NoError(t, err)
 }
 
@@ -37,6 +37,6 @@ func TestAddProcessWithError(t *testing.T) {
 		"Esteam",
 		"Dev",
 		"contract",
-		domain.WithSalary(6000, "usd"))
+		domain.WithSalary(6000, "usd", "gross", "monthly"))
 	assert.EqualError(t, err, "error")
 }

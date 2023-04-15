@@ -9,8 +9,10 @@ import (
 )
 
 type Salary struct {
-	currency Currency
-	amount   int
+	currency   Currency
+	amount     int
+	salaryType SalaryType
+	period     SalaryPeriod
 }
 
 type Currency int
@@ -30,6 +32,44 @@ func ParseCurrency(s string) (Currency, error) {
 		return c, nil
 	}
 	return 0, fmt.Errorf("invalid currency value: %q", s)
+}
+
+type SalaryType int
+
+const (
+	gross SalaryType = iota
+	net
+)
+
+var salaryTypeMap = map[string]SalaryType{
+	"gross": gross,
+	"net":   net,
+}
+
+func ParseSalaryType(s string) (SalaryType, error) {
+	if c, ok := salaryTypeMap[strings.ToLower(s)]; ok {
+		return c, nil
+	}
+	return 0, fmt.Errorf("invalid salary type value: %q", s)
+}
+
+type SalaryPeriod int
+
+const (
+	monthly SalaryPeriod = iota
+	yearly
+)
+
+var salaryPeriodMap = map[string]SalaryPeriod{
+	"monthly": monthly,
+	"yearly":  yearly,
+}
+
+func ParseSalaryPeriod(s string) (SalaryPeriod, error) {
+	if p, ok := salaryPeriodMap[strings.ToLower(s)]; ok {
+		return p, nil
+	}
+	return 0, fmt.Errorf("invalid salary period value: %q", s)
 }
 
 type ProcessID struct {
@@ -180,15 +220,27 @@ func NewProcess(id,
 	return process, nil
 }
 
-func WithSalary(amount int, currency string) func(*Process) error {
+func WithSalary(amount int, currency, salaryType, period string) func(*Process) error {
 	return func(p *Process) error {
 		c, err := ParseCurrency(currency)
 		if err != nil {
 			return fmt.Errorf("invalid currency value: %q", currency)
 		}
+		s, err := ParseSalaryType(salaryType)
+		if err != nil {
+			return err
+		}
+
+		sP, err := ParseSalaryPeriod(period)
+		if err != nil {
+			return err
+		}
+
 		salary := &Salary{
-			amount:   amount,
-			currency: c,
+			amount:     amount,
+			currency:   c,
+			salaryType: s,
+			period:     sP,
 		}
 		p.salary = salary
 		return nil
@@ -201,6 +253,7 @@ func WithClient(client string) func(*Process) error {
 		return nil
 	}
 }
+
 func WithFirstContactDate(s string) func(*Process) error {
 	return func(p *Process) error {
 		fCDate, err := time.Parse("2006-01-02", s)

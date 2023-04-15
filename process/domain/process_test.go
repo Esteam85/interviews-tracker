@@ -31,7 +31,7 @@ func TestAddProcessWithSalary(t *testing.T) {
 		"Esteam",
 		"Dev",
 		"contract",
-		WithSalary(6000, "usd"))
+		WithSalary(6000, "usd", "gross", "monthly"))
 	assert.NoError(t, err)
 }
 
@@ -44,7 +44,7 @@ func TestAddProcessWithSalaryAndClient(t *testing.T) {
 		"Esteam",
 		"Dev",
 		"contract",
-		WithSalary(6000, "usd"),
+		WithSalary(6000, "usd", "gross", "monthly"),
 		WithClient("client"))
 	assert.NoError(t, err)
 }
