@@ -50,6 +50,29 @@ var postulationTypeMap = map[string]PostulationType{
 	"reference": reference,
 }
 
+type Platform int
+
+const (
+	linkedin Platform = iota
+	companyPortal
+	getOnBoard
+	compuTrabajo
+)
+
+var platformMap = map[string]Platform{
+	"linkedin":      linkedin,
+	"companyportal": companyPortal,
+	"computrabajo":  compuTrabajo,
+	"getOnBoard":    getOnBoard,
+}
+
+func ParsePlatform(s string) (Platform, error) {
+	if p, ok := platformMap[strings.ToLower(s)]; ok {
+		return p, nil
+	}
+	return 0, fmt.Errorf("invalid platform type value: %q", s)
+}
+
 func ParsePostulationType(s string) (PostulationType, error) {
 	if p, ok := postulationTypeMap[strings.ToLower(s)]; ok {
 		return p, nil
@@ -100,46 +123,52 @@ type Repository interface {
 
 type Process struct {
 	id               *ProcessID
-	postulationType  PostulationType
+	platform         Platform
 	company          string
 	client           string
+	position         string
 	jobType          JobType
+	postulationType  PostulationType
 	postulationDate  time.Time
 	firstContactDate time.Time
 	salary           *Salary
 }
 
-func NewProcess(id, pType, company,
-	jType,
-	fCDate string, options ...func(p *Process) error) (*Process, error) {
+func NewProcess(id,
+	postulationType,
+	platform,
+	company,
+	position,
+	jobType string,
+	options ...func(p *Process) error) (*Process, error) {
 
 	processID, err := NewProcessID(id)
 	if err != nil {
 		return &Process{}, err
 	}
 
-	postulationType, err := ParsePostulationType(pType)
+	pType, err := ParsePostulationType(postulationType)
 	if err != nil {
 		return &Process{}, err
 	}
 
-	jobType, err := ParseJobType(jType)
+	jType, err := ParseJobType(jobType)
 	if err != nil {
 		return &Process{}, err
 	}
 
-	firstContactDate, err := time.Parse("2006-01-02", fCDate)
+	p, err := ParsePlatform(platform)
 	if err != nil {
 		return &Process{}, err
 	}
-
 	process := &Process{
-		id:               processID,
-		postulationType:  postulationType,
-		company:          company,
-		jobType:          jobType,
-		postulationDate:  time.Now(),
-		firstContactDate: firstContactDate,
+		id:              processID,
+		postulationType: pType,
+		position:        position,
+		company:         company,
+		jobType:         jType,
+		postulationDate: time.Now(),
+		platform:        p,
 	}
 
 	for _, o := range options {
@@ -169,6 +198,16 @@ func WithSalary(amount int, currency string) func(*Process) error {
 func WithClient(client string) func(*Process) error {
 	return func(p *Process) error {
 		p.client = client
+		return nil
+	}
+}
+func WithFirstContactDate(s string) func(*Process) error {
+	return func(p *Process) error {
+		fCDate, err := time.Parse("2006-01-02", s)
+		if err != nil {
+			return err
+		}
+		p.firstContactDate = fCDate
 		return nil
 	}
 }

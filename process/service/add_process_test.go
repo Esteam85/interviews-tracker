@@ -17,10 +17,12 @@ func TestAddProcessSuccessfully(t *testing.T) {
 	m.EXPECT().Save(gomock.Any()).Return(nil)
 	processUsecase := service.NewProcessService(m)
 	err := processUsecase.AddProcess(uuid.New().String(),
-		"own",
-		"nezasa",
-		"fulltime",
-		"2023-04-20", domain.WithSalary(6000, "usd"))
+		"Own",
+		"Linkedin",
+		"Esteam",
+		"Dev",
+		"contract",
+		domain.WithSalary(6000, "usd"))
 	assert.NoError(t, err)
 }
 
@@ -30,9 +32,11 @@ func TestAddProcessWithError(t *testing.T) {
 	m.EXPECT().Save(gomock.Any()).Return(errors.New("error"))
 	processUsecase := service.NewProcessService(m)
 	err := processUsecase.AddProcess(uuid.New().String(),
-		"own",
-		"nezasa",
-		"fulltime",
-		"2023-04-20", domain.WithSalary(6000, "usd"))
+		"Own",
+		"Linkedin",
+		"Esteam",
+		"Dev",
+		"contract",
+		domain.WithSalary(6000, "usd"))
 	assert.EqualError(t, err, "error")
 }
