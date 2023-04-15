@@ -2,6 +2,7 @@ package domain
 
 import (
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -29,9 +30,7 @@ func TestAddProcessWithSalary(t *testing.T) {
 		"contract",
 		"2023-04-12",
 		WithSalary(6000, "usd"))
-	if err != nil {
-		t.Errorf(err.Error())
-	}
+	assert.NoError(t, err)
 }
 
 func TestAddProcessWithSalaryAndClient(t *testing.T) {
@@ -44,7 +43,5 @@ func TestAddProcessWithSalaryAndClient(t *testing.T) {
 		"2023-04-12",
 		WithSalary(6000, "usd"),
 		WithClient("client"))
-	if err != nil {
-		t.Errorf(err.Error())
-	}
+	assert.NoError(t, err)
 }
