@@ -11,9 +11,9 @@ func NewProcessService(r domain.Repository) *ProcessService {
 		repository: r,
 	}
 }
-func (p *ProcessService) AddProcess(id, postulationType, company, jobType, firstContactDate string, options ...func(*domain.Process) error) error {
+func (p *ProcessService) AddProcess(id, postulationType, platform, company, position, jobType string, options ...func(*domain.Process) error) error {
 
-	process, err := domain.NewProcess(id, postulationType, company, jobType, firstContactDate, options...)
+	process, err := domain.NewProcess(id, postulationType, platform, company, position, jobType, options...)
 	if err != nil {
 		return err
 	}

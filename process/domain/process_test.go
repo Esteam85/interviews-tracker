@@ -12,9 +12,10 @@ func TestAddProcessWithoutOptions(t *testing.T) {
 	_, err := NewProcess(
 		id.String(),
 		"Own",
+		"Linkedin",
 		"Esteam",
-		"contract",
-		"2023-04-12")
+		"Dev",
+		"contract")
 	if err != nil {
 		t.Errorf(err.Error())
 	}
@@ -26,9 +27,10 @@ func TestAddProcessWithSalary(t *testing.T) {
 	_, err := NewProcess(
 		id.String(),
 		"Own",
+		"Linkedin",
 		"Esteam",
+		"Dev",
 		"contract",
-		"2023-04-12",
 		WithSalary(6000, "usd"))
 	assert.NoError(t, err)
 }
@@ -38,9 +40,10 @@ func TestAddProcessWithSalaryAndClient(t *testing.T) {
 	_, err := NewProcess(
 		id.String(),
 		"Own",
+		"Linkedin",
 		"Esteam",
+		"Dev",
 		"contract",
-		"2023-04-12",
 		WithSalary(6000, "usd"),
 		WithClient("client"))
 	assert.NoError(t, err)
