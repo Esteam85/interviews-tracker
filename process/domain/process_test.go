@@ -51,13 +51,20 @@ func TestAddProcessWithSalaryAndClient(t *testing.T) {
 
 func TestAddProcessWithFirstContactDate(t *testing.T) {
 	id, _ := uuid.NewUUID()
-	_, err := NewProcess(
+	firstContact, err := NewFirstContact(
+		"2023-04-15",
+		"Mail",
+		WithAnsweredDate("2023-04-24"),
+	)
+	assert.NoError(t, err)
+	_, err = NewProcess(
 		id.String(),
 		"Own",
 		"Linkedin",
 		"Esteam",
 		"Dev",
 		"contract",
-		WithFirstContactDate("2023-04-15"))
+		WithFirstContact(
+			firstContact))
 	assert.NoError(t, err)
 }

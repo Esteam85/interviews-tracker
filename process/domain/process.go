@@ -162,16 +162,16 @@ type Repository interface {
 }
 
 type Process struct {
-	id               *ProcessID
-	platform         Platform
-	company          string
-	client           string
-	position         string
-	jobType          JobType
-	postulationType  PostulationType
-	postulationDate  time.Time
-	firstContactDate time.Time
-	salary           *Salary
+	id              *ProcessID
+	platform        Platform
+	company         string
+	client          string
+	position        string
+	jobType         JobType
+	postulationType PostulationType
+	postulationDate time.Time
+	firstContact    *FirstContact
+	salary          *Salary
 }
 
 func NewProcess(id,
@@ -230,12 +230,10 @@ func WithSalary(amount int, currency, salaryType, period string) func(*Process) 
 		if err != nil {
 			return err
 		}
-
 		sP, err := ParseSalaryPeriod(period)
 		if err != nil {
 			return err
 		}
-
 		salary := &Salary{
 			amount:     amount,
 			currency:   c,
@@ -254,13 +252,9 @@ func WithClient(client string) func(*Process) error {
 	}
 }
 
-func WithFirstContactDate(s string) func(*Process) error {
+func WithFirstContact(f *FirstContact) func(*Process) error {
 	return func(p *Process) error {
-		fCDate, err := time.Parse("2006-01-02", s)
-		if err != nil {
-			return err
-		}
-		p.firstContactDate = fCDate
+		p.firstContact = f
 		return nil
 	}
 }
