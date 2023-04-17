@@ -9,10 +9,10 @@ import (
 )
 
 type Salary struct {
-	currency   Currency
-	amount     int
-	salaryType SalaryType
-	period     SalaryPeriod
+	currency   Currency     `json:"currency,omitempty"`
+	amount     int          `json:"amount,omitempty"`
+	salaryType SalaryType   `json:"salaryType,omitempty"`
+	period     SalaryPeriod `json:"period,omitempty"`
 }
 
 type Currency int
@@ -162,16 +162,16 @@ type Repository interface {
 }
 
 type Process struct {
-	id              *ProcessID
-	platform        Platform
-	company         string
-	client          string
-	position        string
-	jobType         JobType
-	postulationType PostulationType
-	postulationDate time.Time
-	firstContact    *FirstContact
-	salary          *Salary
+	id              *ProcessID      `json:"id,omitempty"`
+	platform        Platform        `json:"platform,omitempty"`
+	company         string          `json:"company,omitempty"`
+	client          string          `json:"client,omitempty"`
+	position        string          `json:"position,omitempty"`
+	jobType         JobType         `json:"jobType,omitempty"`
+	postulationType PostulationType `json:"postulationType,omitempty"`
+	postulationDate time.Time       `json:"postulationDate"`
+	firstContact    *FirstContact   `json:"firstContact,omitempty"`
+	salary          *Salary         `json:"salary,omitempty"`
 }
 
 func NewProcess(id,

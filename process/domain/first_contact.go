@@ -33,9 +33,9 @@ func ParseRecruitmentChannel(s string) (RecruitmentChannel, error) {
 }
 
 type FirstContact struct {
-	date         time.Time
-	channel      RecruitmentChannel
-	answeredDate time.Time
+	date         time.Time          `json:"date"`
+	channel      RecruitmentChannel `json:"channel,omitempty"`
+	answeredDate time.Time          `json:"answeredDate"`
 }
 
 func NewFirstContact(date string, channel string, options ...func(f *FirstContact) error) (*FirstContact, error) {
