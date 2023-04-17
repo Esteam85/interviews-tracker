@@ -33,9 +33,9 @@ func ParseRecruitmentChannel(s string) (RecruitmentChannel, error) {
 }
 
 type FirstContact struct {
-	date         time.Time          `json:"date"`
-	channel      RecruitmentChannel `json:"channel,omitempty"`
-	answeredDate time.Time          `json:"answeredDate"`
+	Ate          time.Time          `json:"date"`
+	Channel      RecruitmentChannel `json:"channel,omitempty"`
+	AnsweredDate time.Time          `json:"answeredDate"`
 }
 
 func NewFirstContact(date string, channel string, options ...func(f *FirstContact) error) (*FirstContact, error) {
@@ -49,9 +49,9 @@ func NewFirstContact(date string, channel string, options ...func(f *FirstContac
 	}
 
 	f := &FirstContact{
-		date:         fCDate,
-		channel:      c,
-		answeredDate: time.Time{},
+		Ate:          fCDate,
+		Channel:      c,
+		AnsweredDate: time.Time{},
 	}
 	for _, o := range options {
 		err = o(f)
@@ -69,11 +69,11 @@ func WithAnsweredDate(s string) func(contact *FirstContact) error {
 			return err
 		}
 
-		if f.date.After(a) {
-			return fmt.Errorf("invalid answered date %s, it can't be setted before %s", s, f.date.String())
+		if f.Ate.After(a) {
+			return fmt.Errorf("invalid answered date %s, it can't be setted before %s", s, f.Ate.String())
 		}
 
-		f.answeredDate = a
+		f.AnsweredDate = a
 		return nil
 	}
 }

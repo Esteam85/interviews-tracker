@@ -9,10 +9,10 @@ import (
 )
 
 type Salary struct {
-	currency   Currency     `json:"currency,omitempty"`
-	amount     int          `json:"amount,omitempty"`
-	salaryType SalaryType   `json:"salaryType,omitempty"`
-	period     SalaryPeriod `json:"period,omitempty"`
+	Currency   Currency     `json:"currency,omitempty"`
+	Amount     int          `json:"amount,omitempty"`
+	SalaryType SalaryType   `json:"salaryType,omitempty"`
+	Period     SalaryPeriod `json:"period,omitempty"`
 }
 
 type Currency int
@@ -153,8 +153,8 @@ func (pId *ProcessID) String() string {
 	return pId.value
 }
 
-func (p *Process) ID() *ProcessID {
-	return p.id
+func (p *Process) ProcessID() *ProcessID {
+	return p.ID
 }
 
 type Repository interface {
@@ -162,16 +162,16 @@ type Repository interface {
 }
 
 type Process struct {
-	id              *ProcessID      `json:"id,omitempty"`
-	platform        Platform        `json:"platform,omitempty"`
-	company         string          `json:"company,omitempty"`
-	client          string          `json:"client,omitempty"`
-	position        string          `json:"position,omitempty"`
-	jobType         JobType         `json:"jobType,omitempty"`
-	postulationType PostulationType `json:"postulationType,omitempty"`
-	postulationDate time.Time       `json:"postulationDate"`
-	firstContact    *FirstContact   `json:"firstContact,omitempty"`
-	salary          *Salary         `json:"salary,omitempty"`
+	ID              *ProcessID      `json:"id,omitempty"`
+	Platform        Platform        `json:"platform,omitempty"`
+	Company         string          `json:"company,omitempty"`
+	Client          string          `json:"client,omitempty"`
+	Position        string          `json:"position,omitempty"`
+	JobType         JobType         `json:"jobType,omitempty"`
+	PostulationType PostulationType `json:"postulationType,omitempty"`
+	PostulationDate time.Time       `json:"postulationDate"`
+	FirstContact    *FirstContact   `json:"firstContact,omitempty"`
+	Salary          *Salary         `json:"salary,omitempty"`
 }
 
 func NewProcess(id,
@@ -202,13 +202,13 @@ func NewProcess(id,
 		return &Process{}, err
 	}
 	process := &Process{
-		id:              processID,
-		postulationType: pType,
-		position:        position,
-		company:         company,
-		jobType:         jType,
-		postulationDate: time.Now(),
-		platform:        p,
+		ID:              processID,
+		PostulationType: pType,
+		Position:        position,
+		Company:         company,
+		JobType:         jType,
+		PostulationDate: time.Now(),
+		Platform:        p,
 	}
 
 	for _, o := range options {
@@ -235,26 +235,26 @@ func WithSalary(amount int, currency, salaryType, period string) func(*Process) 
 			return err
 		}
 		salary := &Salary{
-			amount:     amount,
-			currency:   c,
-			salaryType: s,
-			period:     sP,
+			Amount:     amount,
+			Currency:   c,
+			SalaryType: s,
+			Period:     sP,
 		}
-		p.salary = salary
+		p.Salary = salary
 		return nil
 	}
 }
 
 func WithClient(client string) func(*Process) error {
 	return func(p *Process) error {
-		p.client = client
+		p.Client = client
 		return nil
 	}
 }
 
 func WithFirstContact(f *FirstContact) func(*Process) error {
 	return func(p *Process) error {
-		p.firstContact = f
+		p.FirstContact = f
 		return nil
 	}
 }
