@@ -7,10 +7,10 @@ import (
 )
 
 type ProcessService struct {
-	repository domain.Repository
+	repository domain.ProcessRepository
 }
 
-func NewProcessService(r domain.Repository) *ProcessService {
+func NewProcessService(r domain.ProcessRepository) *ProcessService {
 	return &ProcessService{
 		repository: r,
 	}

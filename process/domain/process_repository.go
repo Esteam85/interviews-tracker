@@ -2,6 +2,6 @@ package domain
 
 import "context"
 
-type Repository interface {
+type ProcessRepository interface {
 	Save(ctx context.Context, process *Process) error
 }

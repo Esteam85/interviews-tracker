@@ -40,3 +40,7 @@ func (m *Client) Disconnect() {
 		panic(err)
 	}
 }
+
+func (m *Client) Client() *mongo.Client {
+	return m.client
+}

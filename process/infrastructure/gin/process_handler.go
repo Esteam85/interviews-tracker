@@ -18,6 +18,11 @@ type ProcessHandler struct {
 	service *service.ProcessService
 }
 
+func NewProcessService(service *service.ProcessService) *ProcessHandler {
+	return &ProcessHandler{
+		service: service,
+	}
+}
 func (p *ProcessHandler) AddProcessHandler(c *gin.Context) {
 	ctx := context.Background()
 	var pAsPrimitives *domain.ProcessAsPrimitives
