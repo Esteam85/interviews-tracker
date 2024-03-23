@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strings"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Salary struct {
@@ -72,10 +70,6 @@ func ParseSalaryPeriod(s string) (SalaryPeriod, error) {
 	return 0, fmt.Errorf("invalid salary period value: %q", s)
 }
 
-type ProcessID struct {
-	value string
-}
-
 type PostulationType int
 
 const (
@@ -139,24 +133,6 @@ func ParseJobType(s string) (JobType, error) {
 	return 0, fmt.Errorf("invalid job type value: %q", s)
 }
 
-func NewProcessID(value string) (*ProcessID, error) {
-	v, err := uuid.Parse(value)
-	if err != nil {
-		return &ProcessID{}, fmt.Errorf("invalid uuid value: %s", err.Error())
-	}
-	return &ProcessID{
-		value: v.String(),
-	}, nil
-}
-
-func (pId *ProcessID) String() string {
-	return pId.value
-}
-
-func (p *Process) ProcessID() *ProcessID {
-	return p.ID
-}
-
 type Repository interface {
 	Save(process *Process) error
 }
@@ -218,6 +194,10 @@ func NewProcess(id,
 		}
 	}
 	return process, nil
+}
+
+func (p *Process) ProcessID() *ProcessID {
+	return p.ID
 }
 
 func WithSalary(amount int, currency, salaryType, period string) func(*Process) error {
