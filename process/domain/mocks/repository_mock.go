@@ -5,6 +5,7 @@
 package mock_domain
 
 import (
+	"context"
 	reflect "reflect"
 
 	"github.com/esteam85/interviews-tracker/process/domain"
@@ -36,7 +37,7 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Save mocks base method.
-func (m *MockRepository) Save(process *domain.Process) error {
+func (m *MockRepository) Save(ctx context.Context, process *domain.Process) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Save", process)
 	ret0, _ := ret[0].(error)
@@ -44,7 +45,7 @@ func (m *MockRepository) Save(process *domain.Process) error {
 }
 
 // Save indicates an expected call of Save.
-func (mr *MockRepositoryMockRecorder) Save(process interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) Save(ctx context.Context, process interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockRepository)(nil).Save), process)
 }

@@ -23,3 +23,7 @@ func Info(i ...interface{}) {
 func Error(i ...interface{}) {
 	logger.Error(fmt.Sprint(i...))
 }
+
+func Errorf(format string, i ...interface{}) {
+	logger.Error(fmt.Sprintf(format, i...))
+}

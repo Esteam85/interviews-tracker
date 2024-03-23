@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"github.com/esteam85/interviews-tracker/process/domain"
 )
 
@@ -13,14 +15,14 @@ func NewProcessService(r domain.Repository) *ProcessService {
 		repository: r,
 	}
 }
-func (p *ProcessService) AddProcess(id, postulationType, platform, company, position, jobType string, options ...func(*domain.Process) error) error {
+func (p *ProcessService) AddProcess(ctx context.Context, id, postulationType, platform, company, position, jobType string, options ...func(*domain.Process) error) error {
 
 	process, err := domain.NewProcess(id, postulationType, platform, company, position, jobType, options...)
 	if err != nil {
 		return err
 	}
 
-	err = p.repository.Save(process)
+	err = p.repository.Save(ctx, process)
 	if err != nil {
 		return err
 	}
