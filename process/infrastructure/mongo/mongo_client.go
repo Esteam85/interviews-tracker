@@ -2,10 +2,10 @@ package mongo
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"github.com/esteam85/interviews-tracker/process/infrastructure/log"
-
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -16,12 +16,10 @@ type Client struct {
 }
 
 func NewClient() (*Client, error) {
-	var mongoUri = "<Your Atlas Connection String>"
-
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(
-		mongoUri,
+		os.Getenv("MONGO_URI"),
 	))
 	if err != nil {
 		log.Error("error trying to connect to mongo,", err.Error())
