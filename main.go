@@ -9,7 +9,8 @@ func main() {
 	router := gin.NewEngine()
 	processHandler := gin.ProcessHandler{}
 	router.POST("/processes", processHandler.AddProcessHandler)
-	err := router.Run("localhost:8080")
+	log.Info("starting server...")
+	err := router.Run()
 	if err != nil {
 		log.Error("error trying to run server", err)
 		panic("http server fail!")

@@ -16,10 +16,10 @@ func init() {
 	}
 }
 
-func Info(msg string, err error) {
-	logger.Info(fmt.Sprintf("%s: %s", msg, err.Error()))
+func Info(i ...interface{}) {
+	logger.Info(fmt.Sprint(i...))
 }
 
-func Error(msg string, err error) {
-	logger.Error(fmt.Sprintf("%s: %s", msg, err.Error()))
+func Error(i ...interface{}) {
+	logger.Error(fmt.Sprint(i...))
 }
