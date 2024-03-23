@@ -16,7 +16,6 @@ func NewProcessService(r domain.Repository) *ProcessService {
 	}
 }
 func (p *ProcessService) AddProcess(ctx context.Context, id, postulationType, platform, company, position, jobType string, options ...func(*domain.Process) error) error {
-
 	process, err := domain.NewProcess(id, postulationType, platform, company, position, jobType, options...)
 	if err != nil {
 		return err
