@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/esteam85/interviews-tracker/process/infrastructure/gin"
-	log "github.com/esteam85/interviews-tracker/process/infrastructure/log"
+	"github.com/esteam85/interviews-tracker/process/infrastructure/log"
 )
 
 func main() {
