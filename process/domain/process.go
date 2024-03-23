@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -37,10 +36,10 @@ type Process struct {
 	client          string
 	position        string
 	jobType         JobType
-	postulationType PostulationType
-	postulationDate time.Time
 	firstContact    *FirstContact
 	salary          *Salary
+	postulationType PostulationType
+	postulationDate time.Time
 }
 
 func NewProcess(id,
@@ -95,23 +94,9 @@ func (p *Process) ProcessID() *ProcessID {
 
 func WithSalary(amount int, currency, salaryType, period string) func(*Process) error {
 	return func(p *Process) error {
-		c, err := ParseCurrency(currency)
-		if err != nil {
-			return fmt.Errorf("invalid currency value: %s", currency)
-		}
-		s, err := ParseSalaryType(salaryType)
+		salary, err := NewSalary(amount, currency, salaryType, period)
 		if err != nil {
 			return err
-		}
-		sP, err := ParseSalaryPeriod(period)
-		if err != nil {
-			return err
-		}
-		salary := &Salary{
-			Amount:     amount,
-			Currency:   c,
-			SalaryType: s,
-			Period:     sP,
 		}
 		p.salary = salary
 		return nil
