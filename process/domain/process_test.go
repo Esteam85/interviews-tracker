@@ -30,7 +30,7 @@ func TestAddProcessWithSalary(t *testing.T) {
 		"Esteam",
 		"Dev",
 		"contract",
-		WithSalary(6000, "usd", "gross", "monthly"))
+		WithSalary(&SalaryAsPrimitives{Amount: 6000, Currency: "usd", SalaryType: "gross", SalaryPeriod: "monthly"}))
 	assert.NoError(t, err)
 }
 
@@ -43,7 +43,7 @@ func TestAddProcessWithSalaryAndClient(t *testing.T) {
 		"Esteam",
 		"Dev",
 		"contract",
-		WithSalary(6000, "usd", "gross", "monthly"),
+		WithSalary(&SalaryAsPrimitives{Amount: 6000, Currency: "usd", SalaryType: "gross", SalaryPeriod: "monthly"}),
 		WithClient("client"))
 	assert.NoError(t, err)
 }
@@ -57,10 +57,6 @@ func TestAddProcessWithFirstContactDate(t *testing.T) {
 		"Esteam",
 		"Dev",
 		"contract",
-		WithFirstContact(
-			"2023-04-15",
-			"Mail",
-			WithAnsweredDate("2023-04-24"),
-		))
+		WithFirstContact(&FirstContactAsPrimitives{"2023-04-15", "Mail", "2023-04-24"}))
 	assert.NoError(t, err)
 }

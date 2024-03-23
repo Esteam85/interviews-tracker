@@ -27,7 +27,15 @@ func (p *ProcessHandler) AddProcessHandler(c *gin.Context) {
 	}
 	var options []domain.ProcessOptions
 	if pAsPrimitives.FirstContact != nil {
-		options = append(options, domain.WithFirstContact(pAsPrimitives.FirstContact.ContactDate, pAsPrimitives.FirstContact.Channel, domain.WithAnsweredDate(pAsPrimitives.FirstContact.AnsweredDate)))
+		options = append(options, domain.WithFirstContact(pAsPrimitives.FirstContact))
+	}
+
+	if pAsPrimitives.Salary != nil {
+		options = append(options, domain.WithSalary(pAsPrimitives.Salary))
+	}
+
+	if pAsPrimitives.Client != "" {
+		options = append(options, domain.WithClient(pAsPrimitives.Client))
 	}
 
 	err = p.service.AddProcess(ctx,

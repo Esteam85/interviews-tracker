@@ -31,18 +31,19 @@ type SalaryAsPrimitives struct {
 
 type Process struct {
 	id              *ProcessID
+	postulationType PostulationType
 	platform        Platform
 	company         string
-	client          string
 	position        string
 	jobType         JobType
+	client          string
 	firstContact    *FirstContact
 	salary          *Salary
-	postulationType PostulationType
 	postulationDate time.Time
 }
 
-func NewProcess(id,
+func NewProcess(
+	id,
 	postulationType,
 	platform,
 	company,
@@ -94,9 +95,9 @@ func (p *Process) ProcessID() *ProcessID {
 
 type ProcessOptions func(*Process) error
 
-func WithSalary(amount int, currency, salaryType, period string) func(*Process) error {
+func WithSalary(Salary *SalaryAsPrimitives) func(*Process) error {
 	return func(p *Process) error {
-		salary, err := NewSalary(amount, currency, salaryType, period)
+		salary, err := NewSalary(Salary.Amount, Salary.Currency, Salary.SalaryType, Salary.SalaryPeriod)
 		if err != nil {
 			return err
 		}
@@ -112,9 +113,13 @@ func WithClient(client string) func(*Process) error {
 	}
 }
 
-func WithFirstContact(date, channel string, options ...func(f *FirstContact) error) func(*Process) error {
+func WithFirstContact(fc *FirstContactAsPrimitives) func(*Process) error {
+	var options []FirstContactOption
+	if fc.AnsweredDate != "" {
+		options = append(options, WithAnsweredDate(fc.AnsweredDate))
+	}
 	return func(p *Process) error {
-		firstContact, err := NewFirstContact(date, channel, options...)
+		firstContact, err := NewFirstContact(fc.ContactDate, fc.Channel, options...)
 		if err != nil {
 			return err
 		}
