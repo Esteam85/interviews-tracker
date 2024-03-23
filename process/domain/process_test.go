@@ -1,9 +1,10 @@
 package domain
 
 import (
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestAddProcessWithoutOptions(t *testing.T) {
@@ -49,13 +50,7 @@ func TestAddProcessWithSalaryAndClient(t *testing.T) {
 
 func TestAddProcessWithFirstContactDate(t *testing.T) {
 	id, _ := uuid.NewUUID()
-	firstContact, err := NewFirstContact(
-		"2023-04-15",
-		"Mail",
-		WithAnsweredDate("2023-04-24"),
-	)
-	assert.NoError(t, err)
-	_, err = NewProcess(
+	_, err := NewProcess(
 		id.String(),
 		"Own",
 		"Linkedin",
@@ -63,6 +58,9 @@ func TestAddProcessWithFirstContactDate(t *testing.T) {
 		"Dev",
 		"contract",
 		WithFirstContact(
-			firstContact))
+			"2023-04-15",
+			"Mail",
+			WithAnsweredDate("2023-04-24"),
+		))
 	assert.NoError(t, err)
 }

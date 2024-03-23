@@ -110,9 +110,13 @@ func WithClient(client string) func(*Process) error {
 	}
 }
 
-func WithFirstContact(f *FirstContact) func(*Process) error {
+func WithFirstContact(date, channel string, options ...func(f *FirstContact) error) func(*Process) error {
 	return func(p *Process) error {
-		p.firstContact = f
+		firstContact, err := NewFirstContact(date, channel, options...)
+		if err != nil {
+			return err
+		}
+		p.firstContact = firstContact
 		return nil
 	}
 }
