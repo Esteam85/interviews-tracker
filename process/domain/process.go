@@ -48,7 +48,7 @@ func NewProcess(id,
 	company,
 	position,
 	jobType string,
-	options ...func(p *Process) error) (*Process, error) {
+	options ...ProcessOptions) (*Process, error) {
 
 	processID, err := NewProcessID(id)
 	if err != nil {
@@ -91,6 +91,8 @@ func NewProcess(id,
 func (p *Process) ProcessID() *ProcessID {
 	return p.id
 }
+
+type ProcessOptions func(*Process) error
 
 func WithSalary(amount int, currency, salaryType, period string) func(*Process) error {
 	return func(p *Process) error {
