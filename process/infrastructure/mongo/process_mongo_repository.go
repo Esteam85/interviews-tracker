@@ -3,9 +3,9 @@ package mongo
 import (
 	"context"
 
+	"github.com/esteam85/interviews-tracker/process/domain"
 	"github.com/esteam85/interviews-tracker/process/infrastructure/log"
 
-	"github.com/esteam85/interviews-tracker/process/domain"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -23,7 +23,7 @@ func NewProcessMongoRepository(client *mongo.Client) *ProcessMongoRepository {
 }
 
 func (p *ProcessMongoRepository) Save(ctx context.Context, process *domain.Process) error {
-	_, err := p.collection.InsertOne(ctx, process)
+	_, err := p.collection.InsertOne(ctx, process.ToPrimitives())
 	if err != nil {
 		log.Errorf("error trying to insert a process with id %s, %s", process.ProcessID(), err.Error())
 		return err

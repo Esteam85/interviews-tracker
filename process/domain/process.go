@@ -93,6 +93,24 @@ func (p *Process) ProcessID() *ProcessID {
 	return p.id
 }
 
+func (p *Process) ToPrimitives() *ProcessAsPrimitives {
+	return &ProcessAsPrimitives{
+		Id:              p.ProcessID().String(),
+		Platform:        p.platform.String(),
+		Company:         p.company,
+		Client:          p.client,
+		Position:        p.position,
+		JobType:         p.jobType.String(),
+		PostulationType: p.postulationType.String(),
+		FirstContact: &FirstContactAsPrimitives{
+			ContactDate:  p.firstContact.ContactDate.String(),
+			Channel:      p.firstContact.Channel.String(),
+			AnsweredDate: p.firstContact.AnsweredDate.String(),
+		},
+		Salary: nil,
+	}
+}
+
 type ProcessOptions func(*Process) error
 
 func WithSalary(Salary *SalaryAsPrimitives) func(*Process) error {

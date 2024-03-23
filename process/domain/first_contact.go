@@ -24,6 +24,14 @@ var recruitmentChannelMap = map[string]RecruitmentChannel{
 	"textmessage":  textMessage,
 }
 
+var invertRecruitmentChannelMap = map[RecruitmentChannel]string{
+	mail:         "mail",
+	linkedinChat: "linkedinchat",
+	whatsapp:     "whatsapp",
+	phoneCall:    "phonecall",
+	textMessage:  "textmessage",
+}
+
 func ParseRecruitmentChannel(s string) (RecruitmentChannel, error) {
 	if r, ok := recruitmentChannelMap[strings.ToLower(s)]; ok {
 		return r, nil
@@ -32,8 +40,13 @@ func ParseRecruitmentChannel(s string) (RecruitmentChannel, error) {
 
 }
 
+func (r RecruitmentChannel) String() string {
+	return invertRecruitmentChannelMap[r]
+
+}
+
 type FirstContact struct {
-	Ate          time.Time          `json:"date"`
+	ContactDate  time.Time          `json:"date"`
 	Channel      RecruitmentChannel `json:"channel,omitempty"`
 	AnsweredDate time.Time          `json:"answeredDate"`
 }
@@ -51,7 +64,7 @@ func NewFirstContact(date, channel string, options ...FirstContactOption) (*Firs
 	}
 
 	f := &FirstContact{
-		Ate:          fCDate,
+		ContactDate:  fCDate,
 		Channel:      c,
 		AnsweredDate: time.Time{},
 	}
@@ -71,8 +84,8 @@ func WithAnsweredDate(s string) func(contact *FirstContact) error {
 			return err
 		}
 
-		if f.Ate.After(a) {
-			return fmt.Errorf("invalid answered date %s, it can't be setted before %s", s, f.Ate.String())
+		if f.ContactDate.After(a) {
+			return fmt.Errorf("invalid answered date %s, it can't be setted before %s", s, f.ContactDate.String())
 		}
 
 		f.AnsweredDate = a

@@ -1,9 +1,12 @@
 package domain
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
+
+var ErrInvalidCurrency = errors.New("invalid currency")
 
 type Currency int
 
@@ -21,5 +24,5 @@ func ParseCurrency(s string) (Currency, error) {
 	if c, ok := currencyMap[strings.ToLower(s)]; ok {
 		return c, nil
 	}
-	return 0, fmt.Errorf("invalid currency value: %q", s)
+	return 0, fmt.Errorf("%w with value: %s", ErrInvalidCurrency, s)
 }

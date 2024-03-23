@@ -17,9 +17,18 @@ var jobTypeMap = map[string]JobType{
 	"fulltime": fulltime,
 }
 
+var invertJobTypeMap = map[JobType]string{
+	contract: "contract",
+	fulltime: "fulltime",
+}
+
 func ParseJobType(s string) (JobType, error) {
 	if p, ok := jobTypeMap[strings.ToLower(s)]; ok {
 		return p, nil
 	}
 	return 0, fmt.Errorf("invalid job type value: %q", s)
+}
+
+func (j JobType) String() string {
+	return invertJobTypeMap[j]
 }

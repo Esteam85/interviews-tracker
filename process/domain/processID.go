@@ -16,7 +16,7 @@ type ProcessID struct {
 func NewProcessID(value string) (*ProcessID, error) {
 	v, err := uuid.Parse(value)
 	if err != nil {
-		return &ProcessID{}, fmt.Errorf("invalid uuid value: %s, %w", value, ErrInvalidProcessID)
+		return &ProcessID{}, fmt.Errorf("invalid process id value: %s, %w", value, ErrInvalidProcessID)
 	}
 	return &ProcessID{
 		value: v.String(),

@@ -5,11 +5,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/esteam85/interviews-tracker/process/infrastructure/log"
-
-	"github.com/esteam85/interviews-tracker/process/service"
-
 	"github.com/esteam85/interviews-tracker/process/domain"
+	"github.com/esteam85/interviews-tracker/process/infrastructure/log"
+	"github.com/esteam85/interviews-tracker/process/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -53,6 +51,7 @@ func (p *ProcessHandler) AddProcessHandler(c *gin.Context) {
 		options...)
 	if err != nil {
 		handleError(c, err)
+		return
 	}
 	c.JSON(http.StatusCreated, pAsPrimitives)
 }
@@ -60,10 +59,11 @@ func (p *ProcessHandler) AddProcessHandler(c *gin.Context) {
 func handleError(c *gin.Context, err error) {
 
 	switch {
-	case errors.Is(err, domain.ErrInvalidProcessID):
-		c.JSON(http.StatusInternalServerError, err.Error())
+	case errors.Is(err, domain.ErrInvalidCurrency),
+		errors.Is(err, domain.ErrInvalidProcessID):
+		c.String(http.StatusInternalServerError, err.Error())
 	default:
 		log.Error("internal server error,", err.Error())
-		c.JSON(http.StatusInternalServerError, err)
+		c.String(http.StatusInternalServerError, err.Error())
 	}
 }
