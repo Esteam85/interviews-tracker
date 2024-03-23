@@ -38,7 +38,7 @@ type FirstContact struct {
 	AnsweredDate time.Time          `json:"answeredDate"`
 }
 
-func NewFirstContact(date string, channel string, options ...func(f *FirstContact) error) (*FirstContact, error) {
+func NewFirstContact(date, channel string, options ...func(f *FirstContact) error) (*FirstContact, error) {
 	fCDate, err := time.Parse("2006-01-02", date)
 	if err != nil {
 		return &FirstContact{}, err

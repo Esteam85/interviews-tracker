@@ -7,7 +7,8 @@ package mock_domain
 import (
 	reflect "reflect"
 
-	domain "github.com/esteam85/interviews-tracker/process/domain"
+	"github.com/esteam85/interviews-tracker/process/domain"
+
 	gomock "github.com/golang/mock/gomock"
 )
 

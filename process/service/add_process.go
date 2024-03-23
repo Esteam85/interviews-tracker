@@ -1,6 +1,8 @@
 package service
 
-import "github.com/esteam85/interviews-tracker/process/domain"
+import (
+	"github.com/esteam85/interviews-tracker/process/domain"
+)
 
 type ProcessService struct {
 	repository domain.Repository

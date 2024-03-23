@@ -2,152 +2,45 @@ package domain
 
 import (
 	"fmt"
-	"strings"
 	"time"
 )
 
-type Salary struct {
-	Currency   Currency     `json:"currency,omitempty"`
-	Amount     int          `json:"amount,omitempty"`
-	SalaryType SalaryType   `json:"salaryType,omitempty"`
-	Period     SalaryPeriod `json:"period,omitempty"`
+type ProcessAsPrimitives struct {
+	Id              string                    `json:"id"`
+	Platform        string                    `json:"platform"`
+	Company         string                    `json:"company"`
+	Client          string                    `json:"client"`
+	Position        string                    `json:"position"`
+	JobType         string                    `json:"job_type"`
+	PostulationType string                    `json:"postulation_type"`
+	FirstContact    *FirstContactAsPrimitives `json:"fist_contact"`
+	Salary          *SalaryAsPrimitives       `json:"salary"`
 }
 
-type Currency int
-
-const (
-	usd Currency = iota
-	clp
-)
-
-var currencyMap = map[string]Currency{
-	"usd": usd,
-	"clp": clp,
+type FirstContactAsPrimitives struct {
+	ContactDate  string `json:"contact_date"`
+	Channel      string `json:"channel"`
+	AnsweredDate string `json:"answered_date"`
 }
 
-func ParseCurrency(s string) (Currency, error) {
-	if c, ok := currencyMap[strings.ToLower(s)]; ok {
-		return c, nil
-	}
-	return 0, fmt.Errorf("invalid currency value: %q", s)
-}
-
-type SalaryType int
-
-const (
-	gross SalaryType = iota
-	net
-)
-
-var salaryTypeMap = map[string]SalaryType{
-	"gross": gross,
-	"net":   net,
-}
-
-func ParseSalaryType(s string) (SalaryType, error) {
-	if c, ok := salaryTypeMap[strings.ToLower(s)]; ok {
-		return c, nil
-	}
-	return 0, fmt.Errorf("invalid salary type value: %q", s)
-}
-
-type SalaryPeriod int
-
-const (
-	monthly SalaryPeriod = iota
-	yearly
-)
-
-var salaryPeriodMap = map[string]SalaryPeriod{
-	"monthly": monthly,
-	"yearly":  yearly,
-}
-
-func ParseSalaryPeriod(s string) (SalaryPeriod, error) {
-	if p, ok := salaryPeriodMap[strings.ToLower(s)]; ok {
-		return p, nil
-	}
-	return 0, fmt.Errorf("invalid salary period value: %q", s)
-}
-
-type PostulationType int
-
-const (
-	own PostulationType = iota
-	recruiter
-	reference
-)
-
-var postulationTypeMap = map[string]PostulationType{
-	"own":       own,
-	"recruiter": recruiter,
-	"reference": reference,
-}
-
-type Platform int
-
-const (
-	linkedin Platform = iota
-	companyPortal
-	getOnBoard
-	compuTrabajo
-)
-
-var platformMap = map[string]Platform{
-	"linkedin":      linkedin,
-	"companyportal": companyPortal,
-	"computrabajo":  compuTrabajo,
-	"getOnBoard":    getOnBoard,
-}
-
-func ParsePlatform(s string) (Platform, error) {
-	if p, ok := platformMap[strings.ToLower(s)]; ok {
-		return p, nil
-	}
-	return 0, fmt.Errorf("invalid platform type value: %q", s)
-}
-
-func ParsePostulationType(s string) (PostulationType, error) {
-	if p, ok := postulationTypeMap[strings.ToLower(s)]; ok {
-		return p, nil
-	}
-	return 0, fmt.Errorf("invalid postulation type value: %q", s)
-}
-
-type JobType int
-
-const (
-	contract JobType = iota
-	fulltime
-)
-
-var jobTypeMap = map[string]JobType{
-	"contract": contract,
-	"fulltime": fulltime,
-}
-
-func ParseJobType(s string) (JobType, error) {
-	if p, ok := jobTypeMap[strings.ToLower(s)]; ok {
-		return p, nil
-	}
-	return 0, fmt.Errorf("invalid job type value: %q", s)
-}
-
-type Repository interface {
-	Save(process *Process) error
+type SalaryAsPrimitives struct {
+	Amount       int    `json:"amount"`
+	Currency     string `json:"currency"`
+	SalaryType   string `json:"salary_type"`
+	SalaryPeriod string `json:"salary_period"`
 }
 
 type Process struct {
-	ID              *ProcessID      `json:"id,omitempty"`
-	Platform        Platform        `json:"platform,omitempty"`
-	Company         string          `json:"company,omitempty"`
-	Client          string          `json:"client,omitempty"`
-	Position        string          `json:"position,omitempty"`
-	JobType         JobType         `json:"jobType,omitempty"`
-	PostulationType PostulationType `json:"postulationType,omitempty"`
-	PostulationDate time.Time       `json:"postulationDate"`
-	FirstContact    *FirstContact   `json:"firstContact,omitempty"`
-	Salary          *Salary         `json:"salary,omitempty"`
+	id              *ProcessID
+	platform        Platform
+	company         string
+	client          string
+	position        string
+	jobType         JobType
+	postulationType PostulationType
+	postulationDate time.Time
+	firstContact    *FirstContact
+	salary          *Salary
 }
 
 func NewProcess(id,
@@ -178,13 +71,13 @@ func NewProcess(id,
 		return &Process{}, err
 	}
 	process := &Process{
-		ID:              processID,
-		PostulationType: pType,
-		Position:        position,
-		Company:         company,
-		JobType:         jType,
-		PostulationDate: time.Now(),
-		Platform:        p,
+		id:              processID,
+		postulationType: pType,
+		position:        position,
+		company:         company,
+		jobType:         jType,
+		postulationDate: time.Now(),
+		platform:        p,
 	}
 
 	for _, o := range options {
@@ -197,14 +90,14 @@ func NewProcess(id,
 }
 
 func (p *Process) ProcessID() *ProcessID {
-	return p.ID
+	return p.id
 }
 
 func WithSalary(amount int, currency, salaryType, period string) func(*Process) error {
 	return func(p *Process) error {
 		c, err := ParseCurrency(currency)
 		if err != nil {
-			return fmt.Errorf("invalid currency value: %q", currency)
+			return fmt.Errorf("invalid currency value: %s", currency)
 		}
 		s, err := ParseSalaryType(salaryType)
 		if err != nil {
@@ -220,21 +113,21 @@ func WithSalary(amount int, currency, salaryType, period string) func(*Process) 
 			SalaryType: s,
 			Period:     sP,
 		}
-		p.Salary = salary
+		p.salary = salary
 		return nil
 	}
 }
 
 func WithClient(client string) func(*Process) error {
 	return func(p *Process) error {
-		p.Client = client
+		p.client = client
 		return nil
 	}
 }
 
 func WithFirstContact(f *FirstContact) func(*Process) error {
 	return func(p *Process) error {
-		p.FirstContact = f
+		p.firstContact = f
 		return nil
 	}
 }
