@@ -15,3 +15,18 @@ func fromPrimitives(p *domain.ProcessAsPrimitives) *ProcessDTO {
 		Process: p,
 	}
 }
+
+func (p ProcessDTO) ToProcess() (*domain.Process, error) {
+	pAsPrimitives := p.Process
+	return domain.NewProcess(
+		pAsPrimitives.ProcessID,
+		pAsPrimitives.PostulationType,
+		pAsPrimitives.Platform,
+		pAsPrimitives.Company,
+		pAsPrimitives.Position,
+		pAsPrimitives.JobType,
+		domain.WithFirstContact(pAsPrimitives.FirstContact),
+		domain.WithSalary(pAsPrimitives.Salary),
+		domain.WithClient(pAsPrimitives.Client),
+	)
+}

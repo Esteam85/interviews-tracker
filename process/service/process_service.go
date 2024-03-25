@@ -16,7 +16,11 @@ func NewProcessService(r domain.ProcessRepository) *ProcessService {
 	}
 }
 
-func (p *ProcessService) AddProcess(ctx context.Context, id, postulationType, platform, company, position, jobType string, options ...domain.ProcessOptions) (err error) {
+func (p *ProcessService) GetAllProcesses(ctx context.Context) ([]domain.Process, error) {
+	return p.repository.GetAll(ctx)
+}
+
+func (p *ProcessService) AddProcess(ctx context.Context, id, postulationType, platform, company, position, jobType string, options ...domain.ProcessOptions) error {
 	process, err := domain.NewProcess(id, postulationType, platform, company, position, jobType, options...)
 	if err != nil {
 		return err

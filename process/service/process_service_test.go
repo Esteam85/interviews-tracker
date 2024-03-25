@@ -15,10 +15,10 @@ import (
 
 func TestAddProcessSuccessfully(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	m := mockdomain.NewMockRepository(ctrl)
-	m.EXPECT().Save(context.Background(), gomock.Any()).Return(nil)
-	processUsecase := service.NewProcessService(m)
-	err := processUsecase.AddProcess(
+	m := mockdomain.NewMockProcessRepository(ctrl)
+	m.EXPECT().Save(context.TODO(), gomock.Any()).Return(nil)
+	processService := service.NewProcessService(m)
+	err := processService.AddProcess(
 		context.TODO(),
 		uuid.New().String(),
 		"Own",
@@ -32,10 +32,10 @@ func TestAddProcessSuccessfully(t *testing.T) {
 
 func TestAddProcessWithError(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	m := mockdomain.NewMockRepository(ctrl)
-	m.EXPECT().Save(context.Background(), gomock.Any()).Return(errors.New("error"))
-	processUsecase := service.NewProcessService(m)
-	err := processUsecase.AddProcess(context.Background(), uuid.New().String(),
+	m := mockdomain.NewMockProcessRepository(ctrl)
+	m.EXPECT().Save(context.TODO(), gomock.Any()).Return(errors.New("error"))
+	processService := service.NewProcessService(m)
+	err := processService.AddProcess(context.TODO(), uuid.New().String(),
 		"Own",
 		"Linkedin",
 		"Esteam",

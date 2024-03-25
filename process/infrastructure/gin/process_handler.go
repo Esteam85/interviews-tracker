@@ -28,19 +28,6 @@ func (p *ProcessHandler) AddProcessHandler(c *gin.Context) {
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, c.Error(err))
 	}
-	var options []domain.ProcessOptions
-	if pAsPrimitives.FirstContact != nil {
-		options = append(options, domain.WithFirstContact(pAsPrimitives.FirstContact))
-	}
-
-	if pAsPrimitives.Salary != nil {
-		options = append(options, domain.WithSalary(pAsPrimitives.Salary))
-	}
-
-	if pAsPrimitives.Client != "" {
-		options = append(options, domain.WithClient(pAsPrimitives.Client))
-	}
-
 	err = p.service.AddProcess(ctx,
 		pAsPrimitives.ProcessID,
 		pAsPrimitives.PostulationType,
@@ -48,7 +35,9 @@ func (p *ProcessHandler) AddProcessHandler(c *gin.Context) {
 		pAsPrimitives.Company,
 		pAsPrimitives.Position,
 		pAsPrimitives.JobType,
-		options...)
+		domain.WithFirstContact(pAsPrimitives.FirstContact),
+		domain.WithSalary(pAsPrimitives.Salary),
+		domain.WithClient(pAsPrimitives.Client))
 	if err != nil {
 		handleError(c, err)
 		return
@@ -56,16 +45,25 @@ func (p *ProcessHandler) AddProcessHandler(c *gin.Context) {
 	c.JSON(http.StatusCreated, pAsPrimitives)
 }
 
+func (p *ProcessHandler) GetAllProcesses(c *gin.Context) {
+	processes, err := p.service.GetAllProcesses(context.Background())
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": processes})
+}
+
 func handleError(c *gin.Context, err error) {
 
 	switch {
 	case errors.Is(err, domain.ErrInvalidCurrency),
 		errors.Is(err, domain.ErrInvalidProcessID):
-		c.String(http.StatusInternalServerError, err.Error())
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 	case errors.Is(err, domain.ErrProcessAlreadyExist):
-		c.String(http.StatusConflict, err.Error())
+		c.IndentedJSON(http.StatusConflict, gin.H{"message": err.Error()})
 	default:
 		log.Error("internal server error,", err.Error())
-		c.String(http.StatusInternalServerError, err.Error())
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
 	}
 }

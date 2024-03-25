@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"go.mongodb.org/mongo-driver/bson"
+
 	"github.com/esteam85/interviews-tracker/process/domain"
 	"github.com/esteam85/interviews-tracker/process/infrastructure/log"
 
@@ -35,4 +37,39 @@ func (p *ProcessMongoRepository) Save(ctx context.Context, process *domain.Proce
 		}
 	}
 	return err
+}
+
+func (p *ProcessMongoRepository) GetAll(ctx context.Context) ([]domain.Process, error) {
+	cursor, err := p.collection.Find(ctx, bson.D{{}})
+	if err != nil {
+		return nil, err
+	}
+	var processes []domain.Process
+	for cursor.Next(ctx) {
+		var processDTO ProcessDTO
+		err = cursor.Decode(&processDTO)
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+		process, err := processDTO.ToProcess()
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+		processes = append(processes, *process)
+	}
+
+	if err = cursor.Err(); err != nil {
+		log.Error(err)
+	}
+
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err = cursor.Close(ctx)
+		if err != nil {
+			log.Error(err)
+		}
+	}(cursor, ctx)
+
+	return processes, nil
 }
