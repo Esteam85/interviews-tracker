@@ -5,7 +5,7 @@ import (
 )
 
 type ProcessAsPrimitives struct {
-	ProcessID       string                    `json:"id"`
+	ProcessID       string                    `json:"process_id"`
 	Platform        string                    `json:"platform"`
 	Company         string                    `json:"company"`
 	Client          string                    `json:"client"`
@@ -30,7 +30,7 @@ type SalaryAsPrimitives struct {
 }
 
 type Process struct {
-	id              *ProcessID
+	processID       *ProcessID
 	postulationType PostulationType
 	platform        Platform
 	company         string
@@ -71,7 +71,7 @@ func NewProcess(
 		return &Process{}, err
 	}
 	process := &Process{
-		id:              processID,
+		processID:       processID,
 		postulationType: pType,
 		position:        position,
 		company:         company,
@@ -90,11 +90,12 @@ func NewProcess(
 }
 
 func (p *Process) ProcessID() *ProcessID {
-	return p.id
+	return p.processID
 }
 
 func (p *Process) ToPrimitives() *ProcessAsPrimitives {
-	return &ProcessAsPrimitives{
+
+	processAsPrimitives := &ProcessAsPrimitives{
 		ProcessID:       p.ProcessID().String(),
 		Platform:        p.platform.String(),
 		Company:         p.company,
@@ -102,18 +103,25 @@ func (p *Process) ToPrimitives() *ProcessAsPrimitives {
 		Position:        p.position,
 		JobType:         p.jobType.String(),
 		PostulationType: p.postulationType.String(),
-		FirstContact: &FirstContactAsPrimitives{
+	}
+
+	if p.firstContact != nil {
+		processAsPrimitives.FirstContact = &FirstContactAsPrimitives{
 			ContactDate:  p.firstContact.ContactDate.String(),
 			Channel:      p.firstContact.Channel.String(),
 			AnsweredDate: p.firstContact.AnsweredDate.String(),
-		},
-		Salary: &SalaryAsPrimitives{
+		}
+	}
+
+	if p.salary != nil {
+		processAsPrimitives.Salary = &SalaryAsPrimitives{
 			Amount:       p.salary.Amount,
 			Currency:     p.salary.Currency.String(),
 			SalaryType:   p.salary.SalaryType.String(),
 			SalaryPeriod: p.salary.Period.String(),
-		},
+		}
 	}
+	return processAsPrimitives
 }
 
 type ProcessOptions func(*Process) error
