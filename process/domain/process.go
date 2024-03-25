@@ -81,6 +81,9 @@ func NewProcess(
 	}
 
 	for _, o := range options {
+		if o == nil {
+			continue
+		}
 		err = o(process)
 		if err != nil {
 			return &Process{}, err
@@ -126,9 +129,12 @@ func (p *Process) ToPrimitives() *ProcessAsPrimitives {
 
 type ProcessOptions func(*Process) error
 
-func WithSalary(Salary *SalaryAsPrimitives) func(*Process) error {
+func WithSalary(sAsPrimitives *SalaryAsPrimitives) func(*Process) error {
+	if sAsPrimitives == nil {
+		return nil
+	}
 	return func(p *Process) error {
-		salary, err := NewSalary(Salary.Amount, Salary.Currency, Salary.SalaryType, Salary.SalaryPeriod)
+		salary, err := NewSalary(sAsPrimitives)
 		if err != nil {
 			return err
 		}
@@ -145,12 +151,11 @@ func WithClient(client string) func(*Process) error {
 }
 
 func WithFirstContact(fc *FirstContactAsPrimitives) func(*Process) error {
-	var options []FirstContactOption
-	if fc.AnsweredDate != "" {
-		options = append(options, WithAnsweredDate(fc.AnsweredDate))
+	if fc == nil {
+		return nil
 	}
 	return func(p *Process) error {
-		firstContact, err := NewFirstContact(fc.ContactDate, fc.Channel, options...)
+		firstContact, err := NewFirstContact(fc.ContactDate, fc.Channel, WithAnsweredDate(fc.AnsweredDate))
 		if err != nil {
 			return err
 		}
