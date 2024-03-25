@@ -42,7 +42,7 @@ func (p *ProcessHandler) AddProcessHandler(c *gin.Context) {
 		handleError(c, err)
 		return
 	}
-	c.JSON(http.StatusCreated, pAsPrimitives)
+	c.JSON(http.StatusCreated, gin.H{"data": pAsPrimitives})
 }
 
 func (p *ProcessHandler) GetAllProcesses(c *gin.Context) {
