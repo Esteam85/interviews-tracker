@@ -16,16 +16,10 @@ func NewProcessService(r domain.ProcessRepository) *ProcessService {
 	}
 }
 
-func (p *ProcessService) AddProcess(ctx context.Context, id, postulationType, platform, company, position, jobType string, options ...domain.ProcessOptions) error {
+func (p *ProcessService) AddProcess(ctx context.Context, id, postulationType, platform, company, position, jobType string, options ...domain.ProcessOptions) (err error) {
 	process, err := domain.NewProcess(id, postulationType, platform, company, position, jobType, options...)
 	if err != nil {
 		return err
 	}
-
-	err = p.repository.Save(ctx, process)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return p.repository.Save(ctx, process)
 }
