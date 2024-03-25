@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"errors"
 
 	"github.com/esteam85/interviews-tracker/process/domain"
 	"github.com/esteam85/interviews-tracker/process/infrastructure/log"
@@ -23,10 +24,15 @@ func NewProcessMongoRepository(client *mongo.Client) *ProcessMongoRepository {
 }
 
 func (p *ProcessMongoRepository) Save(ctx context.Context, process *domain.Process) (err error) {
-	_, err = p.collection.InsertOne(ctx, process.ToPrimitives())
+	_, err = p.collection.InsertOne(ctx, fromPrimitives(process.ToPrimitives()))
 	if err != nil {
-		log.Errorf("error trying to insert a process with id %s, %s", process.ProcessID(), err.Error())
-		return err
+		var mongoErr mongo.WriteException
+		if errors.As(err, &mongoErr) {
+			log.Errorf("error trying to insert a process with id %s, %s", process.ProcessID(), mongoErr.Error())
+		}
+		if mongo.IsDuplicateKeyError(err) {
+			return domain.ErrProcessAlreadyExist
+		}
 	}
 	return err
 }

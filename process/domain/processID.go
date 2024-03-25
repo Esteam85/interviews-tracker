@@ -8,6 +8,7 @@ import (
 )
 
 var ErrInvalidProcessID = errors.New("invalid process id probably not uuid format")
+var ErrProcessAlreadyExist = errors.New("process already exist")
 
 type ProcessID struct {
 	value string

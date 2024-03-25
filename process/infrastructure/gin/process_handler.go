@@ -62,6 +62,8 @@ func handleError(c *gin.Context, err error) {
 	case errors.Is(err, domain.ErrInvalidCurrency),
 		errors.Is(err, domain.ErrInvalidProcessID):
 		c.String(http.StatusInternalServerError, err.Error())
+	case errors.Is(err, domain.ErrProcessAlreadyExist):
+		c.String(http.StatusConflict, err.Error())
 	default:
 		log.Error("internal server error,", err.Error())
 		c.String(http.StatusInternalServerError, err.Error())
