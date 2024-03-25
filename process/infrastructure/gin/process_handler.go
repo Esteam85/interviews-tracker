@@ -42,7 +42,7 @@ func (p *ProcessHandler) AddProcessHandler(c *gin.Context) {
 	}
 
 	err = p.service.AddProcess(ctx,
-		pAsPrimitives.Id,
+		pAsPrimitives.ProcessID,
 		pAsPrimitives.PostulationType,
 		pAsPrimitives.Platform,
 		pAsPrimitives.Company,

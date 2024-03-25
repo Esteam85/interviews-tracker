@@ -5,7 +5,7 @@ import (
 )
 
 type ProcessAsPrimitives struct {
-	Id              string                    `json:"id"`
+	ProcessID       string                    `json:"id"`
 	Platform        string                    `json:"platform"`
 	Company         string                    `json:"company"`
 	Client          string                    `json:"client"`
@@ -95,7 +95,7 @@ func (p *Process) ProcessID() *ProcessID {
 
 func (p *Process) ToPrimitives() *ProcessAsPrimitives {
 	return &ProcessAsPrimitives{
-		Id:              p.ProcessID().String(),
+		ProcessID:       p.ProcessID().String(),
 		Platform:        p.platform.String(),
 		Company:         p.company,
 		Client:          p.client,
@@ -107,7 +107,12 @@ func (p *Process) ToPrimitives() *ProcessAsPrimitives {
 			Channel:      p.firstContact.Channel.String(),
 			AnsweredDate: p.firstContact.AnsweredDate.String(),
 		},
-		Salary: nil,
+		Salary: &SalaryAsPrimitives{
+			Amount:       p.salary.Amount,
+			Currency:     p.salary.Currency.String(),
+			SalaryType:   p.salary.SalaryType.String(),
+			SalaryPeriod: p.salary.Period.String(),
+		},
 	}
 }
 
