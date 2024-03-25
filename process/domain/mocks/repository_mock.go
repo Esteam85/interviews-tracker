@@ -36,7 +36,7 @@ func (m *MockProcessRepository) EXPECT() *MockProcessRepositoryMockRecorder {
 }
 
 // GetAll mocks base method.
-func (m *MockProcessRepository) GetAll(ctx context.Context) ([]domain.Process, error) {
+func (m *MockProcessRepository) GetAll(ctx context.Context) (domain.Processes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAll", ctx)
 	ret0, _ := ret[0].([]domain.Process)

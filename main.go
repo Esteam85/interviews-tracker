@@ -18,6 +18,7 @@ func main() {
 	processService := service.NewProcessService(processMongoRepository)
 	processHandler := gin.NewProcessService(processService)
 	router.POST("/processes", processHandler.AddProcessHandler)
+	router.GET("/processes", processHandler.GetAllProcesses)
 	log.Info("starting server...")
 	err = router.Run()
 	if err != nil {

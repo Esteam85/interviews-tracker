@@ -51,7 +51,7 @@ func (p *ProcessHandler) GetAllProcesses(c *gin.Context) {
 		handleError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": processes})
+	c.JSON(http.StatusOK, gin.H{"data": processes.ToProcessesAsPrimitives()})
 }
 
 func handleError(c *gin.Context, err error) {

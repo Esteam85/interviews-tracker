@@ -16,7 +16,7 @@ func NewProcessService(r domain.ProcessRepository) *ProcessService {
 	}
 }
 
-func (p *ProcessService) GetAllProcesses(ctx context.Context) ([]domain.Process, error) {
+func (p *ProcessService) GetAllProcesses(ctx context.Context) (domain.Processes, error) {
 	return p.repository.GetAll(ctx)
 }
 

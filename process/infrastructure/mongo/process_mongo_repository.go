@@ -39,12 +39,12 @@ func (p *ProcessMongoRepository) Save(ctx context.Context, process *domain.Proce
 	return err
 }
 
-func (p *ProcessMongoRepository) GetAll(ctx context.Context) ([]domain.Process, error) {
+func (p *ProcessMongoRepository) GetAll(ctx context.Context) (domain.Processes, error) {
 	cursor, err := p.collection.Find(ctx, bson.D{{}})
 	if err != nil {
 		return nil, err
 	}
-	var processes []domain.Process
+	var processes domain.Processes
 	for cursor.Next(ctx) {
 		var processDTO ProcessDTO
 		err = cursor.Decode(&processDTO)
