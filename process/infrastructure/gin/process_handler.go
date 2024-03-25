@@ -55,7 +55,6 @@ func (p *ProcessHandler) GetAllProcesses(c *gin.Context) {
 }
 
 func handleError(c *gin.Context, err error) {
-
 	switch {
 	case errors.Is(err, domain.ErrInvalidCurrency),
 		errors.Is(err, domain.ErrInvalidProcessID):
