@@ -19,6 +19,10 @@ func main() {
 	processHandler := gin.NewProcessService(processService)
 	router.POST("/processes", processHandler.AddProcessHandler)
 	router.GET("/processes", processHandler.GetAllProcesses)
+
+	// web config
+	router.Static("/web", "./dist")
+	router.GET("/", gin.RedirectToWeb)
 	log.Info("starting server...")
 	err = router.Run()
 	if err != nil {

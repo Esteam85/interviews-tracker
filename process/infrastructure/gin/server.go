@@ -1,6 +1,7 @@
 package gin
 
 import (
+	"net/http"
 	"net/url"
 	"os"
 	"time"
@@ -9,7 +10,6 @@ import (
 	"github.com/auth0/go-jwt-middleware/v2/jwks"
 	"github.com/auth0/go-jwt-middleware/v2/validator"
 	"github.com/gin-gonic/gin"
-	adapter "github.com/gwatts/gin-adapter"
 )
 
 func NewEngine() *gin.Engine {
@@ -25,7 +25,11 @@ func NewEngine() *gin.Engine {
 		[]string{audience},
 	)
 
-	jwtMiddleware := jwtmiddleware.New(jwtValidator.ValidateToken)
-	r.Use(adapter.Wrap(jwtMiddleware.CheckJWT))
+	_ = jwtmiddleware.New(jwtValidator.ValidateToken)
+	//r.Use(adapter.Wrap(jwtMiddleware.CheckJWT))
 	return r
+}
+
+func RedirectToWeb(c *gin.Context) {
+	c.Redirect(http.StatusMovedPermanently, "/web")
 }
