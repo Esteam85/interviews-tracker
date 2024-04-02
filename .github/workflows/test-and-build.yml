@@ -12,5 +12,7 @@ jobs:
       - name: Test 🧪
         run: go test ./...
 
-      - name: Install and Build 🔧
-        run: go build main.go
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
