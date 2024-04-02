@@ -13,20 +13,19 @@ import (
 )
 
 type ProcessMongoRepository struct {
-	collection *mongo.Collection
+	client *mongo.Client
 }
 
 func NewProcessMongoRepository(client *mongo.Client) *ProcessMongoRepository {
-	var dbName = "Cluster0"
-	var collectionName = "processes"
-	collection := client.Database(dbName).Collection(collectionName)
 	return &ProcessMongoRepository{
-		collection: collection,
+		client: client,
 	}
 }
 
 func (p *ProcessMongoRepository) Save(ctx context.Context, process *domain.Process) (err error) {
-	_, err = p.collection.InsertOne(ctx, fromPrimitives(process.ToPrimitives()))
+	var dbName = "interviews-tracker"
+	var collectionName = "processes"
+	_, err = p.client.Database(dbName).Collection(collectionName).InsertOne(ctx, fromPrimitives(process.ToPrimitives()))
 	if err != nil {
 		var mongoErr mongo.WriteException
 		if errors.As(err, &mongoErr) {
@@ -40,7 +39,9 @@ func (p *ProcessMongoRepository) Save(ctx context.Context, process *domain.Proce
 }
 
 func (p *ProcessMongoRepository) GetAll(ctx context.Context) (domain.Processes, error) {
-	cursor, err := p.collection.Find(ctx, bson.D{{}})
+	var dbName = "Cluster0"
+	var collectionName = "processes"
+	cursor, err := p.client.Database(dbName).Collection(collectionName).Find(ctx, bson.D{{}})
 	if err != nil {
 		return nil, err
 	}

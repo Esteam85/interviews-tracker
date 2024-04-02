@@ -5,9 +5,10 @@ import (
 	"os"
 	"time"
 
+	"go.mongodb.org/mongo-driver/mongo/options"
+
 	"github.com/esteam85/interviews-tracker/process/infrastructure/log"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Client struct {
@@ -18,13 +19,21 @@ type Client struct {
 func NewClient() (*Client, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(
+	clientOptions := options.Client().ApplyURI(
 		os.Getenv("MONGO_URI"),
-	))
+	).SetMaxPoolSize(1600)
+	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Error("error trying to connect to mongo,", err.Error())
 		return nil, err
 	}
+
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Info("success!, now you are Connected to MongoDB Services!")
 
 	return &Client{
 		client: client,

@@ -21,10 +21,10 @@ func main() {
 	router.GET("/processes", processHandler.GetAllProcesses)
 
 	// web config
-	router.Static("/web", "./dist")
+	router.Static("/interviews-tracker", "./dist")
 	router.GET("/", gin.RedirectToWeb)
 	log.Info("starting server...")
-	err = router.Run()
+	err = router.Run("0.0.0.0:8080")
 	if err != nil {
 		log.Error("error trying to run server", err)
 		panic("http server fail!")

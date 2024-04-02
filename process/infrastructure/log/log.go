@@ -27,3 +27,7 @@ func Error(i ...interface{}) {
 func Errorf(format string, i ...interface{}) {
 	logger.Error(fmt.Sprintf(format, i...))
 }
+
+func Fatal(i ...interface{}) {
+	logger.Fatal(fmt.Sprint(i...))
+}
