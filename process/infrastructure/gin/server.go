@@ -1,7 +1,6 @@
 package gin
 
 import (
-	"net/http"
 	"net/url"
 	"os"
 	"time"
@@ -29,8 +28,4 @@ func NewEngine() *gin.Engine {
 	jwtMiddleware := jwtmiddleware.New(jwtValidator.ValidateToken)
 	r.Use(adapter.Wrap(jwtMiddleware.CheckJWT))
 	return r
-}
-
-func RedirectToWeb(c *gin.Context) {
-	c.Redirect(http.StatusMovedPermanently, "/interviews-tracker")
 }

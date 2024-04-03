@@ -14,15 +14,13 @@ func main() {
 		panic("http server fail!")
 	}
 	defer mongoClient.Disconnect()
+
 	processMongoRepository := mongo.NewProcessMongoRepository(mongoClient.Client())
 	processService := service.NewProcessService(processMongoRepository)
 	processHandler := gin.NewProcessService(processService)
 	router.POST("/processes", processHandler.AddProcessHandler)
 	router.GET("/processes", processHandler.GetAllProcesses)
 
-	// web config
-	router.Static("/interviews-tracker", "./dist")
-	router.GET("/", gin.RedirectToWeb)
 	log.Info("starting server...")
 	err = router.Run("0.0.0.0:8080")
 	if err != nil {
